@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/elitsapiens/react-exmp.git"
+    "url": "git+https://github.com/elitsapiens/react-typescript.git"
   },
   "author": "luke",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/elitsapiens/react-exmp/issues"
+    "url": "https://github.com/elitsapiens/react-typescript.git/issues"
   },
-  "homepage": "https://github.com/elitsapiens/react-exmp#readme",
+  "homepage": "https://github.com/elitsapiens/react-typescript.git#readme",
   "devDependencies": {
     "@babel/core": "^7.17.2",
     "@babel/preset-env": "^7.16.11",
