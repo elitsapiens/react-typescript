@@ -1,6 +1,4 @@
 import React, { ReactElement, useRef, useState } from "react";
-import Text from '@/components/Text';
-import useInputs from "@/hooks/useInputs";
 import CreateUser from "./CreateUser";
 import { IUser } from "@/types/index";
 import UserList from "@/components/UserInfo/UserList"
@@ -44,26 +42,22 @@ const initialState =
     ];
 
 const UserInfo: React.FC = () => {
-
     const [ inputs, setInputs ] = useState({
         username: '',
         email: ''
     });
-
     const { username, email } = inputs;
     const [users, setUsers] = useState(initialState);
+    const nextId = useRef(4);
 
     const onChange = (e: React.FormEvent<HTMLInputElement>) => {
         const { value, name } = e.currentTarget;
-        console.log('value:', value);
-        console.log('name: ', name);
         setInputs({
             ...inputs,
             [name]: value
         });
     }
     
-    const nextId = useRef(4);
     const onCreate = () => {
         const user = {
             id: nextId.current,
@@ -81,6 +75,10 @@ const UserInfo: React.FC = () => {
         nextId.current += 1;
     }
 
+    const onRemove = (id: number) => {
+        
+    }
+
     return (
         <> 
             <CreateUser
@@ -89,7 +87,7 @@ const UserInfo: React.FC = () => {
                 onChange={onChange}
                 onCreate={onCreate}
             />
-            <UserList users={users} />
+            <UserList users={users} onRemove={onRemove} />
         </>
     );
 }

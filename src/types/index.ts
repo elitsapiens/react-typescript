@@ -4,7 +4,7 @@ export interface IUserProps {
     username: string,
     email: string,
     onChange?: ((e: React.FormEvent<HTMLInputElement>) => void),
-    onCreate?: (() => void)
+    onCreate?: (() => void),
 }
 
 export interface IUser {
