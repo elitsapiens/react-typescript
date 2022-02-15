@@ -4,6 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin'); //웹팩에서 HTML을
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const webpack = require('webpack');
+const dotenv = require('dotenv');
 
 const mode = process.env.NODE_ENV || 'development';
 
@@ -50,6 +51,9 @@ module.exports = {
         new ForkTsCheckerWebpackPlugin(),
         new webpack.LoaderOptionsPlugin({debug: true}),
         new CleanWebpackPlugin(),
+        new webpack.DefinePlugin({
+            "process.env": JSON.stringify(process.env),
+        })
     ],
     devServer: {
         historyApiFallback: true,

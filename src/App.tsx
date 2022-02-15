@@ -1,64 +1,25 @@
-import React from "react";
-import Text from '@/components/Text';
+import React, { ReactElement } from "react";
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import UserInfo from "@/components/UserInfo/UserInfo";
 
-export interface IUser {
-    id: number,
-    username: string,
-    email: string,
-    active: boolean
-}
-
-interface Action {
-    type: string,
-    payload?: any,
-    user: object
-}
-
-const countActiveUsers = (users: Array<IUser>) => {
-    console.log('화성 사용자수를 세는 중...');
-    return users.filter((user) => user.active).length;
-}
-
-const initialState = {
-    users : [
-        {
-            id: 1,
-            username: 'velopert',
-            email: 'public.velopert@gmail.com',
-            active: true
-        },
-        {
-            id: 2,
-            username: 'tester',
-            email: 'tester@example.com',
-            active: false
-        },
-        {
-            id: 3,
-            username: 'liz',
-            email: 'liz@example.com',
-            active: false
-        }
-    ]
-}
-
-function reducer(state: any, action : Action) {
-    switch(action.type) {
-        case 'CREATE_USER':
-            return {
-                users: state.users.concat(action.user)
-            }
-        default:
-            return state;
-    }
-}
-
-const App = () => {
+// console.log('public url: ', process.env.PUBLIC_URL);
+const App: React.FC = () => {
     return (
-    <div> 
-        react type
-        <Text></Text>
-    </div>);
+        
+        <BrowserRouter basename={process.env.PUBLIC_URL}>
+            <div>
+                <Link to="/">Home</Link>
+                <Link to="/user-info">User Info</Link>
+                <Link to="/user-info-reducer">User Info Reducer</Link>
+            </div>
+            <div>
+                <Routes>
+                    <Route path="/user-info" element={<UserInfo/>} />
+                    <Route path="/user-info-reducer" element={<UserInfo />} />
+                </Routes>
+            </div>
+        </BrowserRouter>
+    )
 }
 
 export default App;
