@@ -1,7 +1,7 @@
 import React from "react";
 import { IUserProps } from "@/types/index"
 
-const CreateUserReducer = ({ username, email, onChange, onCreate } : IUserProps) => {
+const CreateUserHooks = ({ username, email, onChange, onCreate } : IUserProps) => {
     return (
         <div>
             <input
@@ -21,5 +21,4 @@ const CreateUserReducer = ({ username, email, onChange, onCreate } : IUserProps)
     )
 }
 
-export default CreateUserReducer;
-
+export default React.memo(CreateUserHooks);

@@ -1,4 +1,4 @@
-import React, { ReactElement, useRef, useState } from "react";
+import React, { ReactElement, useRef, useState, useMemo } from "react";
 import CreateUser from "./CreateUser";
 import { IUser } from "@/types/index";
 import UserList from "@/components/UserInfo/UserList"
@@ -84,7 +84,7 @@ const UserInfo: React.FC = () => {
         setUsers(users.filter((user) => user.id !== id));
     }
 
-    const count = countActiveUsers(users);
+    const count = useMemo(() => countActiveUsers(users),[users]);
 
     return (
         <> 

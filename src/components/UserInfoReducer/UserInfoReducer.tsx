@@ -1,18 +1,7 @@
-import React, { ReactElement, useCallback, useMemo, useRef, useState } from "react";
-import CreateUserHooks from "./CreateUserHooks";
-import { IUser } from "@/types/index";
-import UserListHook from "@/components/UserInfoHooks/UserListHooks"
-
-// interface Action {
-//     type: string,
-//     payload?: any,
-//     user: object,
-//     id: number,
-// }
-
-// export const CREATE_USER = 'CREATE_USER';
-// export const TOGGLE_USER = 'TOGGLE_USER';
-// export const REMOVE_USER = 'REMOVE_USER';
+import { IUser } from "@/types";
+import React, { useCallback, useState, useMemo, memo, useRef, useReducer} from "react";
+import CreateUserReducer from "./CreateUserReducer";
+import UserListReducer from "./UserListReducer";
 
 const countActiveUsers = (users: Array<IUser>) => {
     console.log('화성 사용자수를 세는 중...');
@@ -41,7 +30,26 @@ const initialState =
         }
     ];
 
-const UserInfoHook: React.FC = () => {
+export const CREATE_USER = 'CREATE_USER';
+export const REMOVE_USER = 'REMOVE_USER';
+export const TOGGLE_USER = 'TOGGLE_USER';
+
+const reducer = (state: IUser[], action: { type : string}) => {
+    switch (action.type) {
+        case CREATE_USER:
+        case TOGGLE_USER:
+
+        case REMOVE_USER:
+
+        default:
+            return state;
+    }
+}
+
+const UserInfoReducer: React.FC = () => {
+    const [state, dispatch] = useReducer(reducer, initialState);
+    const nextId = useRef(4);
+
     const [ inputs, setInputs ] = useState({
         username: '',
         email: ''
@@ -49,7 +57,6 @@ const UserInfoHook: React.FC = () => {
 
     const { username, email } = inputs;
     const [users, setUsers] = useState(initialState);
-    const nextId = useRef(4);
 
     const onChange = useCallback(
         (e: React.FormEvent<HTMLInputElement>) => {
@@ -72,6 +79,7 @@ const UserInfoHook: React.FC = () => {
     );
 
     const onCreate = useCallback(() => {
+
             const user = {
                 id: nextId.current,
                 username,
@@ -102,16 +110,16 @@ const UserInfoHook: React.FC = () => {
 
     return (
         <> 
-            <CreateUserHooks
+            <CreateUserReducer
                 username={username}
                 email={email}
                 onChange={onChange}
                 onCreate={onCreate}
             />
             <div>활성사용자 수 : {count}</div>
-            <UserListHook users={users} onRemove={onRemove} onToggle={onToggle} />
+            <UserListReducer users={users} onRemove={onRemove} onToggle={onToggle} />
         </>
     );
 }
 
-export default React.memo(UserInfoHook);
+export default UserInfoReducer;

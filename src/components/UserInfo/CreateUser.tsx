@@ -2,6 +2,8 @@ import React from "react";
 import { IUserProps } from "@/types/index"
 
 const CreateUser = ({ username, email, onChange, onCreate } : IUserProps) => {
+    console.log('CreateUser call!!');
+
     return (
         <div>
             <input
@@ -21,4 +23,4 @@ const CreateUser = ({ username, email, onChange, onCreate } : IUserProps) => {
     )
 }
 
-export default CreateUser;
+export default React.memo(CreateUser);

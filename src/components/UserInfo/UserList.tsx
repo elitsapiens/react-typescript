@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { IUser } from '@/types/index';
 
 interface IUserMethod {
@@ -15,6 +15,16 @@ interface IUsersProps extends IUserMethod {
 }
 
 const User = ({ user, onRemove, onToggle } : IUserProps) => {
+    
+
+    useEffect(() => {
+        console.log('user 값이 설정됨');
+        console.log(user);
+        return () => {
+            console.log('User 컴포넌트가 삭제됨...');
+        }
+    },[user])
+
     return (
         <div>
             <b
