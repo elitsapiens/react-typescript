@@ -1,6 +1,7 @@
 import React, { ReactElement } from "react";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import UserInfo from "@/components/UserInfo/UserInfo";
+import UserInfoReducer from '@/components/UserInfoReducer/UserInfoReducer';
 
 // console.log('public url: ', process.env.PUBLIC_URL);
 const App: React.FC = () => {
@@ -15,7 +16,7 @@ const App: React.FC = () => {
             <div>
                 <Routes>
                     <Route path="/user-info" element={<UserInfo/>} />
-                    <Route path="/user-info-reducer" element={<UserInfo />} />
+                    <Route path="/user-info-reducer" element={<UserInfoReducer />} />
                 </Routes>
             </div>
         </BrowserRouter>
