@@ -1,29 +1,46 @@
 import React from "react";
 import { IUser } from '@/types/index';
 
-interface IUserProps {
+interface IUserMethod {
+    onRemove: ((id: number) => void),
+    onToggle: ((id: number) => void),
+}
+interface IUserProps extends IUserMethod {
     user: IUser,
-    onRemove?: ((id: number) => void),
     key?: number,
 }
 
-const User = ({ user, onRemove } : IUserProps) => {
+interface IUsersProps extends IUserMethod {
+    users: IUser[],
+}
+
+const User = ({ user, onRemove, onToggle } : IUserProps) => {
     return (
         <div>
-            <b>{user.username}</b><span>({user.email})</span>
+            <b
+                style={{
+                    cursor: 'pointer',
+                    color: user.active ? 'green' : 'black'
+                }}
+                onClick={() => onToggle(user.id)}          
+            >
+                {user.username}
+            </b>
+            <span>({user.email})</span>
             <button onClick={() => onRemove(user.id)}>삭제</button>
         </div>
     )
 }
 
-const UserList = ( { users, onRemove } : {users: IUser[], onRemove: () => void} ) => {
+const UserList = ( { users, onRemove, onToggle } : IUsersProps ) => {
     return (
         <div>
             {users.map(user => (
                 <User 
                     user={user} 
                     key={user.id} 
-                    onRemove={onRemove} 
+                    onRemove={onRemove}
+                    onToggle={onToggle}
                 />
             ))}
         </div>

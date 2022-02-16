@@ -46,6 +46,7 @@ const UserInfo: React.FC = () => {
         username: '',
         email: ''
     });
+
     const { username, email } = inputs;
     const [users, setUsers] = useState(initialState);
     const nextId = useRef(4);
@@ -56,6 +57,10 @@ const UserInfo: React.FC = () => {
             ...inputs,
             [name]: value
         });
+    }
+
+    const onToggle = (id: number) => {
+        setUsers(users.map((user) => (user.id === id) ? {...user, active: !user.active} : user));
     }
     
     const onCreate = () => {
@@ -76,8 +81,10 @@ const UserInfo: React.FC = () => {
     }
 
     const onRemove = (id: number) => {
-        
+        setUsers(users.filter((user) => user.id !== id));
     }
+
+    const count = countActiveUsers(users);
 
     return (
         <> 
@@ -87,7 +94,8 @@ const UserInfo: React.FC = () => {
                 onChange={onChange}
                 onCreate={onCreate}
             />
-            <UserList users={users} onRemove={onRemove} />
+            <div>활성사용자 수 : {count}</div>
+            <UserList users={users} onRemove={onRemove} onToggle={onToggle} />
         </>
     );
 }
