@@ -8,8 +8,12 @@ const countActiveUsers = (users: Array<IUser>) => {
     return users.filter((user) => user.active).length;
 }
 
-const initialState = 
-    [
+const initialState = {
+    inputs: {
+        username: '',
+        email: ''
+    },
+    users: [
         {
             id: 1,
             username: 'velopert',
@@ -28,19 +32,52 @@ const initialState =
             email: 'liz@example.com',
             active: false
         }
-    ];
+    ]
+}
 
 export const CREATE_USER = 'CREATE_USER';
 export const REMOVE_USER = 'REMOVE_USER';
 export const TOGGLE_USER = 'TOGGLE_USER';
+export const CHANGE_INPUT = 'CHANGE_INPUT';
+interface State {
+    inputs: {
+        username: string,
+        email: string
+    },
+    users: IUser[]
+}
 
-const reducer = (state: IUser[], action: { type : string}) => {
+type Action = 
+    | { type: 'CREATE_USER', user: IUser }
+    | { type: 'REMOVE_USER', id: number}
+    | { type: 'TOGGLE_USER', id: number}
+    | { type: 'CHANGE_INPUT', inputVals: {name?: string, value?: string}}
+
+
+const reducer = (state: State, action: Action) => {
     switch (action.type) {
+        case CHANGE_INPUT:
+            return {
+                ...state,
+                inputs: {...state.inputs, ...action.inputVals},
+            }
         case CREATE_USER:
+            return {
+                // inputs: initialState.inputs,
+                // users: state.users.concat(action.user)
+                ...state,
+                users: [...state.users, action.user]
+            };
         case TOGGLE_USER:
-
+            return {
+                ...state,
+                users: state.users.map((user) => (user.id === action.id) ? {...user, active: !user.active} : user)
+            }
         case REMOVE_USER:
-
+            return {
+                ...state,
+                users: state.users.filter((user) => user.id !== action.id)
+            }
         default:
             return state;
     }
@@ -48,51 +85,49 @@ const reducer = (state: IUser[], action: { type : string}) => {
 
 const UserInfoReducer: React.FC = () => {
     const [state, dispatch] = useReducer(reducer, initialState);
+    console.log(dispatch);
     const nextId = useRef(4);
 
-    const [ inputs, setInputs ] = useState({
-        username: '',
-        email: ''
-    });
-
-    const { username, email } = inputs;
-    const [users, setUsers] = useState(initialState);
+    const { users } = state;
+    const { username, email } = state.inputs;
 
     const onChange = useCallback(
         (e: React.FormEvent<HTMLInputElement>) => {
-            console.log('onChange');
-            const { value, name } = e.currentTarget;
-            setInputs(inputs => ({
-                ...inputs,
-                [name]: value
-            }));
+            const { name, value } = e.currentTarget;
+            const inputVals: {name: string, value: string} = { name, value };
+            dispatch({
+                type: CHANGE_INPUT,
+                inputVals: {
+                    [name]: value
+                }
+            });
         },
-        [inputs]
+        [state.inputs]
     );
 
     const onToggle = useCallback(
         (id: number) => 
         {
-            setUsers(users => users.map((user) => (user.id === id) ? {...user, active: !user.active} : user));
+            dispatch({
+                type: TOGGLE_USER,
+                id
+            });
+            // setUsers(users => users.map((user) => (user.id === id) ? {...user, active: !user.active} : user));
         },
         []
     );
 
     const onCreate = useCallback(() => {
-
-            const user = {
-                id: nextId.current,
-                username,
-                email,
-                active: false
-            };
-            setUsers(users => users.concat(user));
-
-            setInputs({
-                username: '',
-                email: ''
+            dispatch({
+                type: CREATE_USER, 
+                user: {
+                    id: nextId.current,
+                    username,
+                    email,
+                    active: false
+                }
             });
-            
+                
             nextId.current += 1;
         },
         [username, email]
@@ -101,7 +136,11 @@ const UserInfoReducer: React.FC = () => {
     const onRemove = useCallback(
         (id: number) => {
             console.log('onRemove');
-            setUsers(users => users.filter((user) => user.id !== id));
+            dispatch({
+                type: REMOVE_USER,
+                id
+            })
+            // setUsers(users => users.filter((user) => user.id !== id));
         },
         []
     );
