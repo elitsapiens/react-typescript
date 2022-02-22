@@ -1,17 +1,20 @@
-import React, { useState, useCallback, ChangeEvent } from "react";
+import React, { useState, useCallback, ChangeEvent, Dispatch, SetStateAction } from "react";
 
-const useInputs = (
-    initialForm: object
-    ): [object, (e: React.FormEvent<HTMLInputElement>) => void, () => void] => {
+type ReturnTypes<T> = [T, (e: React.FormEvent<HTMLInputElement>) => void, Dispatch<SetStateAction<T>>]
+
+const useInputs = <T>(
+    initialForm: T
+    ): ReturnTypes<T> => {
 
     const [form, setForm] = useState(initialForm);
 
-    const onChange = useCallback((e: React.FormEvent<HTMLInputElement>) => {
+    const onchange = useCallback((e: React.FormEvent<HTMLInputElement>) => {
         const { name, value } = e.currentTarget;
+        console.log(name, ':', value);
         setForm(form => ({ ...form, [name]: value}));
     }, []);
     const reset = useCallback(() => setForm(initialForm),[initialForm]);
-    return [form, onChange, reset];
+    return [form, onchange, reset];
 }
 
 export default useInputs;
