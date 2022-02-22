@@ -1,6 +1,6 @@
 import { IUser } from "@/types";
 import React, { useCallback, useState, useMemo, memo, useRef, useReducer, createContext, Dispatch} from "react";
-import CreateUserReducer from "@/components/UserInfoReducer/CreateUserReducer";
+import CreateUserContext from "@/components/UserInfoContext/CreateUserContext";
 import UserListContext from "./UserListContext";
 
 const countActiveUsers = (users: Array<IUser>) => {
@@ -86,12 +86,10 @@ const reducer = (state: State, action: Action) => {
 }
 
 const UserInfoContext: React.FC = () => {
+    
     const [state, dispatch] = useReducer(reducer, initialState);
     // console.log(dispatch);
-    const nextId = useRef(4);
-
     const { users } = state;
-    const { username, email } = state.inputs;
 
     const onChange = useCallback(
         (e: React.FormEvent<HTMLInputElement>) => {
@@ -107,32 +105,11 @@ const UserInfoContext: React.FC = () => {
         [state.inputs]
     );
 
-    const onCreate = useCallback(() => {
-            dispatch({
-                type: CREATE_USER, 
-                user: {
-                    id: nextId.current,
-                    username,
-                    email,
-                    active: false
-                }
-            });
-                
-            nextId.current += 1;
-        },
-        [username, email]
-    );
-    
     const count = useMemo(() => countActiveUsers(users), [users]);
 
     return (
         <UserDispatch.Provider value={dispatch}> 
-            <CreateUserReducer
-                username={username}
-                email={email}
-                onChange={onChange}
-                onCreate={onCreate}
-            />
+            <CreateUserContext />
             <div>활성사용자 수 : {count}</div>
             <UserListContext users={users} />
         </UserDispatch.Provider>
