@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import UserInfo from "@/components/UserInfo/UserInfo";
 import UserInfoHooks from '@/components/UserInfoHooks/UserInfoHooks';
 import UserInfoReducer from '@/components/UserInfoReducer/UserInfoReducer';
+import UserInfoContext from "@/components/UserInfoContext/UserInfoContext";
 import UseInfoReducerCustomHook from '@/components/UserInfoReducer/UseInfoReducerCustomHook'
 import CounterReducer from "./components/Counter/CounterReducer";
 
@@ -15,6 +16,7 @@ const App: React.FC = () => {
                 <Link to="/user-info">User Info</Link>
                 <Link to="/user-info-hooks">User Info Hooks</Link>
                 <Link to="/user-info-reducer">User Info Reducer</Link>
+                <Link to="/user-info-context">User Info Context</Link>
                 <Link to="/user-info-reducer-custom-hook">User Info Reducer Custom Hook</Link>
                 <Link to="/counter-reduce">Counter Reduce</Link>
             </div>
@@ -23,6 +25,7 @@ const App: React.FC = () => {
                     <Route path="/user-info" element={<UserInfo/>} />
                     <Route path="/user-info-hooks" element={<UserInfoHooks />} />
                     <Route path="/user-info-reducer" element={<UserInfoReducer />} />
+                    <Route path="/user-info-context" element={<UserInfoContext />} />
                     <Route path="/user-info-reducer-custom-hook" element={<UseInfoReducerCustomHook />} />/
                     <Route path="/counter-reduce" element={<CounterReducer />} />
                     

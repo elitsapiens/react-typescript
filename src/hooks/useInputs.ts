@@ -10,7 +10,6 @@ const useInputs = <T>(
 
     const onchange = useCallback((e: React.FormEvent<HTMLInputElement>) => {
         const { name, value } = e.currentTarget;
-        console.log(name, ':', value);
         setForm(form => ({ ...form, [name]: value}));
     }, []);
     const reset = useCallback(() => setForm(initialForm),[initialForm]);

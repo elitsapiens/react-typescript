@@ -1,7 +1,7 @@
 import { IUser } from "@/types";
-import React, { useCallback, useState, useMemo, memo, useRef, useReducer } from "react";
-import CreateUserReducer from "./CreateUserReducer";
-import UserListReducer from "./UserListReducer";
+import React, { useCallback, useState, useMemo, memo, useRef, useReducer, createContext, Dispatch} from "react";
+import CreateUserReducer from "@/components/UserInfoReducer/CreateUserReducer";
+import UserListContext from "./UserListContext";
 
 const countActiveUsers = (users: Array<IUser>) => {
     console.log('화성 사용자수를 세는 중...');
@@ -53,6 +53,8 @@ type Action =
     | { type: 'TOGGLE_USER', id: number}
     | { type: 'CHANGE_INPUT', inputVals: {name?: string, value?: string}}
 
+type UserType = Dispatch<Action>;
+export const UserDispatch = React.createContext<UserType | any>(null);
 
 const reducer = (state: State, action: Action) => {
     switch (action.type) {
@@ -83,7 +85,7 @@ const reducer = (state: State, action: Action) => {
     }
 }
 
-const UserInfoReducer: React.FC = () => {
+const UserInfoContext: React.FC = () => {
     const [state, dispatch] = useReducer(reducer, initialState);
     // console.log(dispatch);
     const nextId = useRef(4);
@@ -105,18 +107,6 @@ const UserInfoReducer: React.FC = () => {
         [state.inputs]
     );
 
-    const onToggle = useCallback(
-        (id: number) => 
-        {
-            dispatch({
-                type: TOGGLE_USER,
-                id
-            });
-            // setUsers(users => users.map((user) => (user.id === id) ? {...user, active: !user.active} : user));
-        },
-        []
-    );
-
     const onCreate = useCallback(() => {
             dispatch({
                 type: CREATE_USER, 
@@ -132,23 +122,11 @@ const UserInfoReducer: React.FC = () => {
         },
         [username, email]
     );
-
-    const onRemove = useCallback(
-        (id: number) => {
-            console.log('onRemove');
-            dispatch({
-                type: REMOVE_USER,
-                id
-            })
-            // setUsers(users => users.filter((user) => user.id !== id));
-        },
-        []
-    );
-
+    
     const count = useMemo(() => countActiveUsers(users), [users]);
 
     return (
-        <> 
+        <UserDispatch.Provider value={dispatch}> 
             <CreateUserReducer
                 username={username}
                 email={email}
@@ -156,9 +134,9 @@ const UserInfoReducer: React.FC = () => {
                 onCreate={onCreate}
             />
             <div>활성사용자 수 : {count}</div>
-            <UserListReducer users={users} onRemove={onRemove} onToggle={onToggle} />
-        </>
+            <UserListContext users={users} />
+        </UserDispatch.Provider>
     );
 }
 
-export default UserInfoReducer;
+export default UserInfoContext;
