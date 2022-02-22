@@ -2,7 +2,7 @@ import React, { useState, useCallback, ChangeEvent, Dispatch, SetStateAction } f
 
 type ReturnTypes<T> = [T, (e: React.FormEvent<HTMLInputElement>) => void, Dispatch<SetStateAction<T>>]
 
-const useInputs = <T>(
+const useInputs = <T> (
     initialForm: T
     ): ReturnTypes<T> => {
 

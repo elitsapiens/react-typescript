@@ -2,6 +2,7 @@ import { IUser } from "@/types";
 import React, { useCallback, useState, useMemo, memo, useRef, useReducer } from "react";
 import CreateUserReducer from "./CreateUserReducer";
 import UserListReducer from "./UserListReducer";
+import produce from "immer";
 
 const countActiveUsers = (users: Array<IUser>) => {
     console.log('화성 사용자수를 세는 중...');
@@ -54,6 +55,33 @@ type Action =
     | { type: 'CHANGE_INPUT', inputVals: {name?: string, value?: string}}
 
 
+const immerReducer = (state: State, action: Action) => {
+    switch (action.type) {
+        case CHANGE_INPUT:
+            return {
+                ...state,
+                inputs: {...state.inputs, ...action.inputVals},
+            }
+        case CREATE_USER:
+            return produce(state, draft => {
+                draft.users.push(action.user);
+            });
+        case TOGGLE_USER:
+            return produce(state, draft => {
+                const user = draft.users.find(user => user.id === action.id);
+                if(user) user.active = !user.active;
+                else user;
+            })
+        case REMOVE_USER:
+            return produce(state, draft => {
+                const index = draft.users.findIndex(user => user.id === action.id);
+                draft.users.splice(index, 1);
+            })
+        default:
+            return state;
+    }
+}
+
 const reducer = (state: State, action: Action) => {
     switch (action.type) {
         case CHANGE_INPUT:
@@ -84,7 +112,7 @@ const reducer = (state: State, action: Action) => {
 }
 
 const UserInfoReducer: React.FC = () => {
-    const [state, dispatch] = useReducer(reducer, initialState);
+    const [state, dispatch] = useReducer(immerReducer, initialState);
     // console.log(dispatch);
     const nextId = useRef(4);
 
