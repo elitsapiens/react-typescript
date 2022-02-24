@@ -3,6 +3,7 @@ import React, { useCallback, useState, useMemo, memo, useRef, useReducer } from 
 import CreateUserReducer from "./CreateUserReducer";
 import UserListReducer from "./UserListReducer";
 import produce from "immer";
+import ErrorHandler from "../ErrorHandler";
 
 const countActiveUsers = (users: Array<IUser>) => {
     console.log('화성 사용자수를 세는 중...');
@@ -113,7 +114,6 @@ const reducer = (state: State, action: Action) => {
 
 const UserInfoReducer: React.FC = () => {
     const [state, dispatch] = useReducer(immerReducer, initialState);
-    // console.log(dispatch);
     const nextId = useRef(4);
 
     const { users } = state;
@@ -176,7 +176,7 @@ const UserInfoReducer: React.FC = () => {
     const count = useMemo(() => countActiveUsers(users), [users]);
 
     return (
-        <> 
+        <ErrorHandler>
             <CreateUserReducer
                 username={username}
                 email={email}
@@ -185,7 +185,7 @@ const UserInfoReducer: React.FC = () => {
             />
             <div>활성사용자 수 : {count}</div>
             <UserListReducer users={users} onRemove={onRemove} onToggle={onToggle} />
-        </>
+        </ErrorHandler>
     );
 }
 

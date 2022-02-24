@@ -40,6 +40,8 @@
     "webpack-dev-server": "^4.7.4"
   },
   "dependencies": {
+    "@sentry/react": "^6.17.9",
+    "@sentry/tracing": "^6.17.9",
     "immer": "^9.0.12",
     "package.json": "^2.0.1",
     "react": "^17.0.2",
