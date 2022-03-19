@@ -1,4 +1,5 @@
 import React, { useReducer } from "react";
+import styled from "styled-components";
 
 export const INCREASE = 'INCREASE';
 export const DECREASE = 'DECREASE';
@@ -13,6 +14,13 @@ const reducer = (state: number, action: {type: string}) => {
             return state;
     }
 }
+
+const Circle = styled.div`
+    width: 5rem;
+    height: 5rem;
+    background: black;
+    border-radius: 50%;
+`;
 
 const CounterReducer = () => {
 
@@ -31,6 +39,7 @@ const CounterReducer = () => {
             <h1>{num}</h1>
             <button onClick={onIncrease}>+1</button>
             <button onClick={onDecrease}>-1</button>
+            <Circle />
         </>
     )
 }
