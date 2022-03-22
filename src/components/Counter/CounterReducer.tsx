@@ -1,5 +1,6 @@
 import React, { useReducer } from "react";
-import styled from "styled-components";
+import styled, { css, ThemeProvider } from "styled-components";
+import Button from "@/components/Button/Button";
 
 export const INCREASE = 'INCREASE';
 export const DECREASE = 'DECREASE';
@@ -15,11 +16,36 @@ const reducer = (state: number, action: {type: string}) => {
     }
 }
 
-const Circle = styled.div`
+interface DefaultProps {
+    readonly huge: boolean 
+}
+
+const Circle = styled.div<DefaultProps>`
     width: 5rem;
     height: 5rem;
-    background: black;
+    background: ${props => props.color || 'black'};
     border-radius: 50%;
+    ${props =>
+        props.huge && 
+        css`
+            width: 10rem;
+            height: 10rem;
+        `
+    }
+`;
+
+const AppBlock = styled.div`
+  width: 512px;
+  margin: 0 auto;
+  margin-top: 4rem;
+  border: 1px solid black;
+  padding: 1rem;
+`;
+
+const ButtonGroup = styled.div`
+    & + & {
+        margin-top: 1rem;
+    }
 `;
 
 const CounterReducer = () => {
@@ -35,13 +61,41 @@ const CounterReducer = () => {
     }
 
     return (
-        <>
+        <ThemeProvider
+            theme={{
+                palette: {
+                    blue: '#228be6',
+                    gray: '#495057',
+                    pink: '#f06595'    
+                }
+            }}
+        >
             <h1>{num}</h1>
             <button onClick={onIncrease}>+1</button>
             <button onClick={onDecrease}>-1</button>
-            <Circle />
-        </>
+            <Circle color="red" huge/>
+            <AppBlock>
+                <ButtonGroup>
+                    <Button size="large">BUTTON</Button>
+                    <Button>BUTTON</Button>
+                    <Button size="small">BUTTON</Button>
+                </ButtonGroup>
+
+                <ButtonGroup>
+                    <Button color="pink" size="large">BUTTON</Button>
+                    <Button color="pink">BUTTON</Button>
+                    <Button color="pink" size="small"> Button </Button>
+                </ButtonGroup>
+
+                <ButtonGroup>
+                    <Button color="gray" size="large">BUTTON</Button>
+                    <Button color="gray">BUTTON</Button>
+                    <Button color="gray" size="small"> Button </Button>
+                </ButtonGroup>
+            </AppBlock>
+        </ThemeProvider>
     )
 }
+
 
 export default CounterReducer;
