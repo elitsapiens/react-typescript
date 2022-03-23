@@ -42,6 +42,21 @@ const ButtonGroup = styled.div`
     justify-content: flex-end;
 `;
 
+// Button 컴포넌트를 받아서 다른 css로 대체
+const ShortMarginButton = styled(Button)`
+    & + & {
+        margin-left: 0.5rem;
+    }
+`;
+
+const onCancel = () => {
+
+}
+
+const onConfirm = () => {
+    
+}
+
 function Dialog({title, children, confirmText, cancelText} : IDialogParams ) {
     return (
         <DarkBackground>
@@ -49,8 +64,8 @@ function Dialog({title, children, confirmText, cancelText} : IDialogParams ) {
                 <h3>{title}</h3>
                 <p>{children}</p>
                 <ButtonGroup>
-                    <Button color="gray">{cancelText}</Button>
-                    <Button color="pink">{confirmText}</Button>
+                    <ShortMarginButton color="gray" onClick={onCancel}>{cancelText}</ShortMarginButton>
+                    <ShortMarginButton color="pink" onClick={onConfirm}>{confirmText}</ShortMarginButton>
                 </ButtonGroup>
             </DialogBlock>
         </DarkBackground>

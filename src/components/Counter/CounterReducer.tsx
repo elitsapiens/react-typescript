@@ -133,6 +133,5 @@ const CounterReducer = () => {
         </ThemeProvider>
     )
 }
-
-
+                                    
 export default CounterReducer;
