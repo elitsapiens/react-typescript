@@ -1,6 +1,7 @@
 import React, { useReducer } from "react";
 import styled, { css, ThemeProvider } from "styled-components";
 import Button from "@/components/Button/Button";
+import Dialog from "../Button/Dialog";
 
 export const INCREASE = 'INCREASE';
 export const DECREASE = 'DECREASE';
@@ -75,24 +76,60 @@ const CounterReducer = () => {
             <button onClick={onDecrease}>-1</button>
             <Circle color="red" huge/>
             <AppBlock>
-                <ButtonGroup>
-                    <Button size="large">BUTTON</Button>
-                    <Button>BUTTON</Button>
-                    <Button size="small">BUTTON</Button>
-                </ButtonGroup>
-
-                <ButtonGroup>
-                    <Button color="pink" size="large">BUTTON</Button>
-                    <Button color="pink">BUTTON</Button>
-                    <Button color="pink" size="small"> Button </Button>
-                </ButtonGroup>
-
-                <ButtonGroup>
-                    <Button color="gray" size="large">BUTTON</Button>
-                    <Button color="gray">BUTTON</Button>
-                    <Button color="gray" size="small"> Button </Button>
-                </ButtonGroup>
+            <ButtonGroup>
+                <Button size="large">BUTTON</Button>
+                <Button>BUTTON</Button>
+                <Button size="small">BUTTON</Button>
+            </ButtonGroup>
+            <ButtonGroup>
+                <Button color="gray" size="large">
+                    BUTTON
+                </Button>
+                <Button color="gray">BUTTON</Button>
+                <Button color="gray" size="small">
+                    BUTTON
+                </Button>
+            </ButtonGroup>
+            <ButtonGroup>
+                <Button color="pink" size="large">
+                    BUTTON
+                </Button>
+                <Button color="pink">BUTTON</Button>
+                <Button color="pink" size="small">
+                    BUTTON
+                </Button>
+            </ButtonGroup>
+            <ButtonGroup>
+                <Button size="large" outline>
+                    BUTTON
+                </Button>
+                <Button color="gray" outline>
+                    BUTTON
+                </Button>
+                <Button color="pink" size="small" outline>
+                    BUTTON
+                </Button>
+            </ButtonGroup>
+            <ButtonGroup>
+                <Button size="large" fullWidth>
+                    BUTTON
+                </Button>
+                <Button size="large" color="gray" fullWidth>
+                    BUTTON
+                </Button>
+                <Button size="large" color="pink" fullWidth>
+                    BUTTON
+                </Button>
+            </ButtonGroup>
             </AppBlock>
+            <Dialog
+                title="삭제하시겠습니까?"
+                confirmText="삭제"
+                cancelText="취소"
+            >
+                데이터를 삭제하시겠습니까?
+            </Dialog>
+
         </ThemeProvider>
     )
 }

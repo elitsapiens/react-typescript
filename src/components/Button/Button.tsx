@@ -7,8 +7,24 @@ interface ButtonColor {
 }
 
 interface ButtonSize {
-    size?: string
+    size: string
 }
+
+interface ButtonWidth {
+    fullWidth: boolean
+}
+
+type ButtonSizeType = {
+    [key in string]: string
+}
+
+interface buttonType {
+    height: string,
+    fontSize: string
+}
+// type buttonSizes = "large" | "medium" | "small";
+// type buttonSizeDetail = "height" | "fontSize";
+// type buttonType = {[key in buttonSizes]: buttonSizeDetail};
 
 // typescript 뭐로 처리해야 할지 몰라서 우선은 any로 수정
 const colorStyles = css<ButtonColor>`
@@ -27,7 +43,7 @@ const colorStyles = css<ButtonColor>`
     }}
 `;
 
-const sizes = {
+const sizes : {[key: string]: buttonType} = {
     large: {
         height: '3rem',
         fontSize: '1.25rem'
@@ -42,28 +58,26 @@ const sizes = {
     }
 };
 
-const sizeStyles = css<ButtonSize>`
-   ${props => 
-    props.size === 'large' &&
-    css`
-        height: 3rem;
-        font-size: 1.25rem;
-   `}
-
-   ${props => 
-    props.size === 'medium' &&
-    css`
-        height: 2.25rem;
-        font-size: 1rem;
-   `}
-
-   ${props => 
-    props.size === 'small' &&
-    css`
-        height: 1.75rem;
-        font-size: 0.875rem;
+const sizeStyles = css<ButtonSizeType>`
+    ${({ size }) => css`
+        height: ${sizes[size].height};
+        font-size: ${sizes[size].fontSize};
    `}
 `;
+
+const fullWidthStyle = css<ButtonWidth>`
+    ${props =>
+        props.fullWidth &&
+        css`
+            width: 100%;
+            justify-content: center;
+            & + & {
+                margin-left: 0;
+                margin-top: 1rem;
+            }
+        `
+    }
+`
 
 const StyledButton = styled.button`
     /*  공통스타일 */
@@ -94,6 +108,7 @@ const Button = ({ children, color, size, ...rest } : any) => {
 
 Button.defaultProps = {
     color: 'blue',
+    size: 'medium'
 };
 
 export default Button;
