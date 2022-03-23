@@ -1,15 +1,59 @@
-import React from "react";
-import styled from "styled-components";
+import React, { useEffect, useState } from "react";
+import styled, { css, keyframes } from "styled-components";
 import Button from "./Button";
 
 interface IDialogParams {
     title: string,
     children: string,
     confirmText?: string,
-    cancelText? : string
+    cancelText? : string,
+    onCancel?: (() => void),
+    onConfirm?: (() => void),
+    visible?: boolean
 }
 
-const DarkBackground = styled.div`
+interface IDarkBackground {
+    disappear?: boolean
+}
+
+const fadeIn = keyframes`
+    from {
+        opacity: 0
+    }
+    to {
+        opacity: 1
+    }
+`;
+
+const fadeOut = keyframes`
+    from {
+        opacity: 1
+
+    }
+    to  {
+        opacity: 0
+    }
+`;
+
+const slideUp = keyframes`
+    from {
+        transform: translateY(200px);
+    }
+    to {
+        transform: translateY(0px);
+    }
+`;
+
+const slideDown = keyframes`
+    from {
+        transform: translateY(0px);
+    }
+    to {
+        transform: translateY(200px);
+    }
+`;
+
+const DarkBackground = styled.div<IDarkBackground>`
     position: fixed;
     left: 0;
     top: 0;
@@ -19,10 +63,22 @@ const DarkBackground = styled.div`
     align-items: center;
     justify-content: center;
     background: rgba(0, 0, 0, 0.8);
+
+    animation-duration: 0.25s;
+    animation-timing-function: ease-out;
+    animation-name: ${fadeIn};
+    animation-fill-mode: forwards;
+
+    ${props => 
+        props.disappear &&
+        css`
+            animation-name: ${fadeOut};
+        `
+    }
 `;
 
 
-const DialogBlock = styled.div`
+const DialogBlock = styled.div<IDarkBackground>`
     width: 320px;
     padding: 1.5rem;
     background: white;
@@ -33,6 +89,18 @@ const DialogBlock = styled.div`
     }
     p {
         font-size: 1.125rem;
+    }
+
+    animation-duration: 0.25s;
+    animation-timing-function: ease-out;
+    animation-name: ${slideUp};
+    animation-fill-mode: forwards;
+
+    ${props => 
+        props.disappear &&
+        css`
+            animation-name: ${slideDown};
+        `
     }
 `;
 
@@ -49,18 +117,31 @@ const ShortMarginButton = styled(Button)`
     }
 `;
 
-const onCancel = () => {
+function Dialog({
+    title, 
+    children, 
+    confirmText, 
+    cancelText,
+    onConfirm,
+    onCancel,
+    visible
+} : IDialogParams ) {
 
-}
+    const [animate, setAnimate] = useState(false);
+    const [localVisible, setLogcalVisible] = useState(visible);
 
-const onConfirm = () => {
-    
-}
+    useEffect(() => {
+        if(localVisible && !visible) {
+            setAnimate(true);
+            setTimeout(() => setAnimate(false), 250);
+        }
+        setLogcalVisible(visible);
+    }, [localVisible, visible]);
 
-function Dialog({title, children, confirmText, cancelText} : IDialogParams ) {
+    if(!animate && !localVisible) return null;
     return (
-        <DarkBackground>
-            <DialogBlock>
+        <DarkBackground disappear={!visible}>
+            <DialogBlock disappear={!visible}>
                 <h3>{title}</h3>
                 <p>{children}</p>
                 <ButtonGroup>
